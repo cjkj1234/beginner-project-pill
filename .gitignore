@@ -1,0 +1,35 @@
+# 데이터 (용량 크고 공유 불가)
+data/raw/*
+!data/raw/.gitkeep
+data/augmented/
+data/splits/
+
+# 모델 가중치
+outputs/
+*.pt
+*.onnx
+*.pth
+
+# Python
+.vscode/*
+!.vscode/settings.json
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# 환경
+.env
+
+# Claude Code
+.claude/
+CLAUDE.md
+
+# WandB 로컬 실험 캐시 (실험 데이터는 WandB 클라우드에 저장됨)
+wandb/
+
+# 로컬 문서 (개인 보고서/메모) — docs/ 전체 로컬 전용, git push 없음
+docs/
+wandb/

@@ -1,0 +1,56 @@
+﻿from pathlib import Path
+
+import torch
+from torch import nn
+from torch.optim import Optimizer
+
+
+def save_checkpoint(
+    model: nn.Module,
+    optimizer: Optimizer,
+    epoch: int,
+    val_mAP: float,
+    checkpoint_dir: str | Path = "outputs/checkpoints",
+    is_best: bool = False,
+    ema=None,
+    version: str | None = None,
+) -> Path:
+    checkpoint_dir = Path(checkpoint_dir)       #checkpoint_dir 경로를 Path 객체로 변환
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)       #checkpoint_dir이 존재하지 않으면 디렉토리를 생성, parents=True는 상위 디렉토리도 함께 생성, exist_ok=True는 이미 디렉토리가 존재해도 에러 없이 넘어가도록 함
+
+    checkpoint = {      #체크포인트에 저장할 정보들을 딕셔너리 형태로 만듦
+        "epoch": epoch,     #현재 epoch 번호
+        "model_state": model.state_dict(),      #모델의 상태 사전 (모델의 가중치와 버퍼 정보)
+        "optimizer_state": optimizer.state_dict(),      #옵티마이저의 상태 사전 (옵티마이저의 매개변수와 내부 상태 정보)
+        "ema_state": ema.state_dict() if ema is not None else None,     #ema가 켜져있으면 ema 모델 가중치도 저장
+        "val_mAP": val_mAP,     #현재 validation mAP 점수
+    }
+
+    path = checkpoint_dir / "last.pt"
+    torch.save(checkpoint, path)
+
+    if is_best:
+        best_name = f"best-{version}.pt" if version else "best_model.pt"
+        torch.save(checkpoint, checkpoint_dir / best_name)
+
+    return path
+
+
+def load_checkpoint(        #저장된 체크포인트 파일에서 모델과 옵티마이저의 상태를 불러오는 함수
+    path: str | Path,       #불러올 체크포인트 파일의 경로
+    model: nn.Module,       #체크포인트에서 불러온 모델의 상태를 저장할 모델 객체
+    optimizer: Optimizer | None = None,     #체크포인트에서 불러온 옵티마이저의 상태를 저장할 옵티마이저 객체, 기본값은 None (옵티마이저 상태를 불러오지 않음)
+    ema=None,       #체크포인트에서 불러온 EMA 상태를 저장할 EMA 객체
+    device: str | torch.device = "cpu",     #체크포인트를 불러올 때 모델과 옵티마이저의 상태를 이동시킬 장치, 기본값은 "cpu"
+) -> dict:      #체크포인트에서 불러온 정보들을 딕셔너리 형태로 반환하는 함수
+    checkpoint = torch.load(path, map_location=device)      #체크포인트 파일을 지정한 장치로 불러옴
+    model.load_state_dict(checkpoint["model_state"])        #체크포인트에서 불러온 모델의 상태를 모델 객체에 로드
+
+    if optimizer is not None:       #옵티마이저가 제공된 경우
+        optimizer.load_state_dict(checkpoint["optimizer_state"])        #체크포인트에서 불러온 옵티마이저의 상태를 옵티마이저 객체에 로드
+
+    if ema is not None:     #EMA 객체가 제공된 경우
+        ema.load_state_dict(checkpoint["ema_state"])       #체크포인트에서 불러온 EMA 상태를 EMA 객체에 로드
+
+    return checkpoint
+
