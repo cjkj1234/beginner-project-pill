@@ -1,0 +1,34 @@
+{
+	"nodes":[
+		{"id":"1ba086a1142c4edd","type":"group","x":-180,"y":-237,"width":290,"height":317,"label":"웹"},
+		{"id":"8fcb6812c746b47e","type":"text","text":"백엔드","x":-160,"y":-217,"width":250,"height":60},
+		{"id":"7a714630f5fd567f","type":"text","text":"데이터베이스","x":-160,"y":0,"width":250,"height":60},
+		{"id":"82da7753d0ab8a92","type":"text","text":"프론트엔드","x":-160,"y":-120,"width":250,"height":60},
+		{"id":"8c8e98eef7dbea5a","type":"text","text":"허깅페이스","x":200,"y":-217,"width":250,"height":60},
+		{"id":"046771b911ce238e","type":"text","text":"vercel","x":200,"y":-120,"width":250,"height":60},
+		{"id":"3f0afbec06422ce2","type":"text","text":"supabase","x":197,"y":0,"width":250,"height":60},
+		{"id":"41dbefe3b9ff4958","x":660,"y":-120,"width":250,"height":60,"type":"text","text":"mcp(허깅페이스, 버셀, 수파베이스)"},
+		{"id":"88e3a6739be046a4","x":1020,"y":-122,"width":250,"height":62,"type":"text","text":"코덱스"},
+		{"id":"a514f05e183d4f6f","x":660,"y":-340,"width":250,"height":60,"type":"text","text":"허깅페이스, 버셀, 수파베이스"},
+		{"id":"f4318931dc33812c","x":1440,"y":-122,"width":250,"height":60,"type":"text","text":".env"},
+		{"id":"b87789bdfec91c94","x":1820,"y":-122,"width":250,"height":60,"type":"text","text":"supabase url, key, hugging face key, url, vercel key url"},
+		{"id":"8885774fad9bc41c","x":1820,"y":21,"width":250,"height":59,"type":"text","text":"google ouath, api key"},
+		{"id":"9e3ed1ace5689754","x":1020,"y":0,"width":250,"height":60,"type":"text","text":"google mcp"},
+		{"id":"8e78cdebef971360","x":2220,"y":21,"width":250,"height":60,"type":"text","text":"구글 스튜디오"}
+	],
+	"edges":[
+		{"id":"dc56f4de8d686ac7","fromNode":"8fcb6812c746b47e","fromSide":"right","toNode":"8c8e98eef7dbea5a","toSide":"left"},
+		{"id":"55cd5977cc1139d6","fromNode":"82da7753d0ab8a92","fromSide":"right","toNode":"046771b911ce238e","toSide":"left"},
+		{"id":"6a332dc4c9430bf0","fromNode":"7a714630f5fd567f","fromSide":"right","toNode":"3f0afbec06422ce2","toSide":"left"},
+		{"id":"8b222bbc9c058516","fromNode":"f4318931dc33812c","fromSide":"right","toNode":"b87789bdfec91c94","toSide":"left"},
+		{"id":"9e329efdcd96b974","fromNode":"8c8e98eef7dbea5a","fromSide":"right","toNode":"41dbefe3b9ff4958","toSide":"left"},
+		{"id":"e1dbe3a2d5e720ec","fromNode":"046771b911ce238e","fromSide":"right","toNode":"41dbefe3b9ff4958","toSide":"left"},
+		{"id":"8f12c69892998228","fromNode":"3f0afbec06422ce2","fromSide":"right","toNode":"41dbefe3b9ff4958","toSide":"left"},
+		{"id":"f2da5f8cb345c5aa","fromNode":"41dbefe3b9ff4958","fromSide":"right","toNode":"88e3a6739be046a4","toSide":"left"},
+		{"id":"b8a8ccafbd1669a5","fromNode":"88e3a6739be046a4","fromSide":"right","toNode":"f4318931dc33812c","toSide":"left","fromEnd":"arrow"},
+		{"id":"acd9535d096c691d","fromNode":"41dbefe3b9ff4958","fromSide":"top","toNode":"a514f05e183d4f6f","toSide":"bottom"},
+		{"id":"f089b3dea3503d92","fromNode":"8885774fad9bc41c","fromSide":"right","toNode":"8e78cdebef971360","toSide":"left"},
+		{"id":"51760f47a5ee6d8d","fromNode":"8885774fad9bc41c","fromSide":"top","toNode":"b87789bdfec91c94","toSide":"bottom"},
+		{"id":"a91f21c9761c9a4c","fromNode":"9e3ed1ace5689754","fromSide":"right","toNode":"f4318931dc33812c","toSide":"left"}
+	]
+}

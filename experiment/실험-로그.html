@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr"><head><title>실험 로그</title><meta charset="utf-8"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted Grotesk:wght@400;700&amp;family=Source Sans Pro:ital,wght@0,400;0,600;1,400;1,600&amp;family=IBM Plex Mono:wght@400;600&amp;display=swap"/><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="og:site_name" content="Sprint First Project"/><meta property="og:title" content="실험 로그"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="실험 로그"/><meta name="twitter:description" content="실험 로그 버전별 실험 결과 트래킹. 제출할 때마다 한 줄 추가."/><meta property="og:description" content="실험 로그 버전별 실험 결과 트래킹. 제출할 때마다 한 줄 추가."/><meta property="og:image:alt" content="실험 로그 버전별 실험 결과 트래킹. 제출할 때마다 한 줄 추가."/><meta property="og:image" content="https://beomjinkim2000.github.io/Sprint_First_Proj/static/og-image.png"/><meta property="og:image:url" content="https://beomjinkim2000.github.io/Sprint_First_Proj/static/og-image.png"/><meta name="twitter:image" content="https://beomjinkim2000.github.io/Sprint_First_Proj/static/og-image.png"/><meta property="og:image:type" content="image/.png"/><meta property="twitter:domain" content="beomjinkim2000.github.io/Sprint_First_Proj"/><meta property="og:url" content="https://beomjinkim2000.github.io/Sprint_First_Proj/experiment/실험-로그"/><meta property="twitter:url" content="https://beomjinkim2000.github.io/Sprint_First_Proj/experiment/실험-로그"/><link rel="icon" href="../static/icon.png"/><meta name="description" content="실험 로그 버전별 실험 결과 트래킹. 제출할 때마다 한 줄 추가."/><meta name="generator" content="Quartz"/><link href="../index.css" rel="stylesheet" type="text/css" data-persist="true"/><style>.expand-button {
+  position: absolute;
+  display: flex;
+  float: right;
+  padding: 0.4rem;
+  margin: 0.3rem;
+  right: 0;
+  color: var(--gray);
+  border-color: var(--dark);
+  background-color: var(--light);
+  border: 1px solid;
+  border-radius: 5px;
+  opacity: 0;
+  transition: 0.2s;
+}
+.expand-button > svg {
+  fill: var(--light);
+  filter: contrast(0.3);
+}
+.expand-button:hover {
+  cursor: pointer;
+  border-color: var(--secondary);
+}
+.expand-button:focus {
+  outline: 0;
+}
+
+pre:hover > .expand-button {
+  opacity: 1;
+  transition: 0.2s;
+}
+
+#mermaid-container {
+  position: fixed;
+  contain: layout;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: none;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+}
+#mermaid-container.active {
+  display: inline-block;
+}
+#mermaid-container > #mermaid-space {
+  border: 1px solid var(--lightgray);
+  background-color: var(--light);
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80vh;
+  width: 80vw;
+  overflow: hidden;
+}
+#mermaid-container > #mermaid-space > .mermaid-content {
+  position: relative;
+  transform-origin: 0 0;
+  transition: transform 0.1s ease;
+  overflow: visible;
+  min-height: 200px;
+  min-width: 200px;
+}
+#mermaid-container > #mermaid-space > .mermaid-content pre {
+  margin: 0;
+  border: none;
+}
+#mermaid-container > #mermaid-space > .mermaid-content svg {
+  max-width: none;
+  height: auto;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--lightgray);
+  background: var(--light);
+  color: var(--dark);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: var(--bodyFont);
+  transition: all 0.2s ease;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:hover {
+  background: var(--lightgray);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:active {
+  transform: translateY(1px);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:nth-child(2) {
+  width: auto;
+  padding: 0 12px;
+  font-size: 14px;
+}
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiL3RtcC9xdWFydHovcXVhcnR6L2NvbXBvbmVudHMvc3R5bGVzIiwic291cmNlcyI6WyJtZXJtYWlkLmlubGluZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBOztBQUdGO0VBQ0U7RUFDQTs7QUFHRjtFQUNFOzs7QUFLRjtFQUNFO0VBQ0E7OztBQUlKO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFQTtFQUNFOztBQUdGO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBOztBQUdGO0VBQ0U7RUFDQTs7QUFJSjtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7O0FBR0Y7RUFDRTs7QUFJRjtFQUNFO0VBQ0E7RUFDQSIsInNvdXJjZXNDb250ZW50IjpbIi5leHBhbmQtYnV0dG9uIHtcbiAgcG9zaXRpb246IGFic29sdXRlO1xuICBkaXNwbGF5OiBmbGV4O1xuICBmbG9hdDogcmlnaHQ7XG4gIHBhZGRpbmc6IDAuNHJlbTtcbiAgbWFyZ2luOiAwLjNyZW07XG4gIHJpZ2h0OiAwOyAvLyBOT1RFOiByaWdodCB3aWxsIGJlIHNldCBpbiBtZXJtYWlkLmlubGluZS50c1xuICBjb2xvcjogdmFyKC0tZ3JheSk7XG4gIGJvcmRlci1jb2xvcjogdmFyKC0tZGFyayk7XG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWxpZ2h0KTtcbiAgYm9yZGVyOiAxcHggc29saWQ7XG4gIGJvcmRlci1yYWRpdXM6IDVweDtcbiAgb3BhY2l0eTogMDtcbiAgdHJhbnNpdGlvbjogMC4ycztcblxuICAmID4gc3ZnIHtcbiAgICBmaWxsOiB2YXIoLS1saWdodCk7XG4gICAgZmlsdGVyOiBjb250cmFzdCgwLjMpO1xuICB9XG5cbiAgJjpob3ZlciB7XG4gICAgY3Vyc29yOiBwb2ludGVyO1xuICAgIGJvcmRlci1jb2xvcjogdmFyKC0tc2Vjb25kYXJ5KTtcbiAgfVxuXG4gICY6Zm9jdXMge1xuICAgIG91dGxpbmU6IDA7XG4gIH1cbn1cblxucHJlIHtcbiAgJjpob3ZlciA+IC5leHBhbmQtYnV0dG9uIHtcbiAgICBvcGFjaXR5OiAxO1xuICAgIHRyYW5zaXRpb246IDAuMnM7XG4gIH1cbn1cblxuI21lcm1haWQtY29udGFpbmVyIHtcbiAgcG9zaXRpb246IGZpeGVkO1xuICBjb250YWluOiBsYXlvdXQ7XG4gIHotaW5kZXg6IDk5OTtcbiAgbGVmdDogMDtcbiAgdG9wOiAwO1xuICB3aWR0aDogMTAwdnc7XG4gIGhlaWdodDogMTAwdmg7XG4gIG92ZXJmbG93OiBoaWRkZW47XG4gIGRpc3BsYXk6IG5vbmU7XG4gIGJhY2tkcm9wLWZpbHRlcjogYmx1cig0cHgpO1xuICBiYWNrZ3JvdW5kOiByZ2JhKDAsIDAsIDAsIDAuNSk7XG5cbiAgJi5hY3RpdmUge1xuICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgfVxuXG4gICYgPiAjbWVybWFpZC1zcGFjZSB7XG4gICAgYm9yZGVyOiAxcHggc29saWQgdmFyKC0tbGlnaHRncmF5KTtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1saWdodCk7XG4gICAgYm9yZGVyLXJhZGl1czogNXB4O1xuICAgIHBvc2l0aW9uOiBmaXhlZDtcbiAgICB0b3A6IDUwJTtcbiAgICBsZWZ0OiA1MCU7XG4gICAgdHJhbnNmb3JtOiB0cmFuc2xhdGUoLTUwJSwgLTUwJSk7XG4gICAgaGVpZ2h0OiA4MHZoO1xuICAgIHdpZHRoOiA4MHZ3O1xuICAgIG92ZXJmbG93OiBoaWRkZW47XG5cbiAgICAmID4gLm1lcm1haWQtY29udGVudCB7XG4gICAgICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gICAgICB0cmFuc2Zvcm0tb3JpZ2luOiAwIDA7XG4gICAgICB0cmFuc2l0aW9uOiB0cmFuc2Zvcm0gMC4xcyBlYXNlO1xuICAgICAgb3ZlcmZsb3c6IHZpc2libGU7XG4gICAgICBtaW4taGVpZ2h0OiAyMDBweDtcbiAgICAgIG1pbi13aWR0aDogMjAwcHg7XG5cbiAgICAgIHByZSB7XG4gICAgICAgIG1hcmdpbjogMDtcbiAgICAgICAgYm9yZGVyOiBub25lO1xuICAgICAgfVxuXG4gICAgICBzdmcge1xuICAgICAgICBtYXgtd2lkdGg6IG5vbmU7XG4gICAgICAgIGhlaWdodDogYXV0bztcbiAgICAgIH1cbiAgICB9XG5cbiAgICAmID4gLm1lcm1haWQtY29udHJvbHMge1xuICAgICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgICAgYm90dG9tOiAyMHB4O1xuICAgICAgcmlnaHQ6IDIwcHg7XG4gICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgZ2FwOiA4cHg7XG4gICAgICBwYWRkaW5nOiA4cHg7XG4gICAgICBiYWNrZ3JvdW5kOiB2YXIoLS1saWdodCk7XG4gICAgICBib3JkZXI6IDFweCBzb2xpZCB2YXIoLS1saWdodGdyYXkpO1xuICAgICAgYm9yZGVyLXJhZGl1czogNnB4O1xuICAgICAgYm94LXNoYWRvdzogMCAycHggNHB4IHJnYmEoMCwgMCwgMCwgMC4xKTtcbiAgICAgIHotaW5kZXg6IDI7XG5cbiAgICAgIC5tZXJtYWlkLWNvbnRyb2wtYnV0dG9uIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICAgICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gICAgICAgIHdpZHRoOiAzMnB4O1xuICAgICAgICBoZWlnaHQ6IDMycHg7XG4gICAgICAgIHBhZGRpbmc6IDA7XG4gICAgICAgIGJvcmRlcjogMXB4IHNvbGlkIHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgICAgIGJhY2tncm91bmQ6IHZhcigtLWxpZ2h0KTtcbiAgICAgICAgY29sb3I6IHZhcigtLWRhcmspO1xuICAgICAgICBib3JkZXItcmFkaXVzOiA0cHg7XG4gICAgICAgIGN1cnNvcjogcG9pbnRlcjtcbiAgICAgICAgZm9udC1zaXplOiAxNnB4O1xuICAgICAgICBmb250LWZhbWlseTogdmFyKC0tYm9keUZvbnQpO1xuICAgICAgICB0cmFuc2l0aW9uOiBhbGwgMC4ycyBlYXNlO1xuXG4gICAgICAgICY6aG92ZXIge1xuICAgICAgICAgIGJhY2tncm91bmQ6IHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgICAgIH1cblxuICAgICAgICAmOmFjdGl2ZSB7XG4gICAgICAgICAgdHJhbnNmb3JtOiB0cmFuc2xhdGVZKDFweCk7XG4gICAgICAgIH1cblxuICAgICAgICAvLyBTdHlsZSB0aGUgcmVzZXQgYnV0dG9uIGRpZmZlcmVudGx5XG4gICAgICAgICY6bnRoLWNoaWxkKDIpIHtcbiAgICAgICAgICB3aWR0aDogYXV0bztcbiAgICAgICAgICBwYWRkaW5nOiAwIDEycHg7XG4gICAgICAgICAgZm9udC1zaXplOiAxNHB4O1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuICB9XG59XG4iXX0= */</style><link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet" type="text/css" data-persist="true"/><script src="../prescript.js" type="application/javascript" data-persist="true"></script><script type="application/javascript" data-persist="true">const fetchData = fetch("../static/contentIndex.json").then(data => data.json())</script><link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://beomjinkim2000.github.io/Sprint_First_Proj/index.xml"/></head><body data-slug="experiment/실험-로그"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h2 class="page-title"><a href="..">Sprint First Project</a></h2><div class="spacer mobile-only"></div><div class="flex-component" style="flex-direction: row; flex-wrap: nowrap; gap: 1rem;"><div style="flex-grow: 1; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><div class="search"><button class="search-button"><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title>Search</title><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg><p>검색</p></button><div class="search-container"><div class="search-space"><input autocomplete="off" class="search-bar" name="search" type="text" aria-label="검색어를 입력하세요" placeholder="검색어를 입력하세요"/><div class="search-layout" data-preview="true"></div></div></div></div></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="darkmode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35" xml:space="preserve" aria-label="다크 모드"><title>다크 모드</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100" xml:space="preserve" aria-label="라이트 모드"><title>라이트 모드</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></button></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="readermode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="readerIcon" fill="currentColor" stroke="currentColor" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round" width="64px" height="64px" viewBox="0 0 24 24" aria-label="리더 모드"><title>리더 모드</title><g transform="translate(-1.8, -1.8) scale(1.15, 1.2)"><path d="M8.9891247,2.5 C10.1384702,2.5 11.2209868,2.96705384 12.0049645,3.76669482 C12.7883914,2.96705384 13.8709081,2.5 15.0202536,2.5 L18.7549359,2.5 C19.1691495,2.5 19.5049359,2.83578644 19.5049359,3.25 L19.5046891,4.004 L21.2546891,4.00457396 C21.6343849,4.00457396 21.9481801,4.28672784 21.9978425,4.6528034 L22.0046891,4.75457396 L22.0046891,20.25 C22.0046891,20.6296958 21.7225353,20.943491 21.3564597,20.9931534 L21.2546891,21 L2.75468914,21 C2.37499337,21 2.06119817,20.7178461 2.01153575,20.3517706 L2.00468914,20.25 L2.00468914,4.75457396 C2.00468914,4.37487819 2.28684302,4.061083 2.65291858,4.01142057 L2.75468914,4.00457396 L4.50368914,4.004 L4.50444233,3.25 C4.50444233,2.87030423 4.78659621,2.55650904 5.15267177,2.50684662 L5.25444233,2.5 L8.9891247,2.5 Z M4.50368914,5.504 L3.50468914,5.504 L3.50468914,19.5 L10.9478955,19.4998273 C10.4513189,18.9207296 9.73864328,18.5588115 8.96709342,18.5065584 L8.77307039,18.5 L5.25444233,18.5 C4.87474657,18.5 4.56095137,18.2178461 4.51128895,17.8517706 L4.50444233,17.75 L4.50368914,5.504 Z M19.5049359,17.75 C19.5049359,18.1642136 19.1691495,18.5 18.7549359,18.5 L15.2363079,18.5 C14.3910149,18.5 13.5994408,18.8724714 13.0614828,19.4998273 L20.5046891,19.5 L20.5046891,5.504 L19.5046891,5.504 L19.5049359,17.75 Z M18.0059359,3.999 L15.0202536,4 L14.8259077,4.00692283 C13.9889509,4.06666544 13.2254227,4.50975805 12.7549359,5.212 L12.7549359,17.777 L12.7782651,17.7601316 C13.4923805,17.2719483 14.3447024,17 15.2363079,17 L18.0059359,16.999 L18.0056891,4.798 L18.0033792,4.75457396 L18.0056891,4.71 L18.0059359,3.999 Z M8.9891247,4 L6.00368914,3.999 L6.00599909,4.75457396 L6.00599909,4.75457396 L6.00368914,4.783 L6.00368914,16.999 L8.77307039,17 C9.57551536,17 10.3461406,17.2202781 11.0128313,17.6202194 L11.2536891,17.776 L11.2536891,5.211 C10.8200889,4.56369974 10.1361548,4.13636104 9.37521067,4.02745763 L9.18347055,4.00692283 L8.9891247,4 Z"></path></g></svg></button></div></div><div class="explorer" data-behavior="link" data-collapsed="collapsed" data-savestate="true" data-data-fns="{&quot;order&quot;:[&quot;filter&quot;,&quot;map&quot;,&quot;sort&quot;],&quot;sortFn&quot;:&quot;(a,b)=>!a.isFolder&amp;&amp;!b.isFolder||a.isFolder&amp;&amp;b.isFolder?a.displayName.localeCompare(b.displayName,void 0,{numeric:!0,sensitivity:\&quot;base\&quot;}):!a.isFolder&amp;&amp;b.isFolder?1:-1&quot;,&quot;filterFn&quot;:&quot;node=>node.slugSegment!==\&quot;tags\&quot;&quot;,&quot;mapFn&quot;:&quot;node=>node&quot;}"><button type="button" class="explorer-toggle mobile-explorer hide-until-loaded" data-mobile="true" aria-controls="explorer-66"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-menu"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg></button><button type="button" class="title-button explorer-toggle desktop-explorer" data-mobile="false" aria-expanded="true"><h2>탐색기</h2><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="explorer-66" class="explorer-content" aria-expanded="false" role="group"><ul class="explorer-ul overflow" id="list-0"><li class="overflow-end"></li></ul></div><template id="template-file"><li><a href="#"></a></li></template><template id="template-folder"><li><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div><button class="folder-button"><span class="folder-title"></span></button></div></div><div class="folder-outer"><ul class="content"></ul></div></li></template></div></div><div class="center"><div class="page-header"><div class="popover-hint"><nav class="breadcrumb-container" aria-label="breadcrumbs"><div class="breadcrumb-element"><a href="../">Home</a><p> ❯ </p></div><div class="breadcrumb-element"><a href="../experiment/">experiment</a><p> ❯ </p></div><div class="breadcrumb-element"><a href>실험 로그</a></div></nav><h1 class="article-title">실험 로그</h1><p show-comma="true" class="content-meta"><time datetime="2026-06-01T00:00:00.000Z">2026년 6월 01일</time><span>17 min read</span></p><ul class="tags"><li><a href="../tags/experiment" class="internal tag-link">experiment</a></li><li><a href="../tags/log" class="internal tag-link">log</a></li></ul></div></div><article class="popover-hint"><h1 id="실험-로그">실험 로그<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#실험-로그" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<blockquote>
+<p>버전별 실험 결과 트래킹. 제출할 때마다 한 줄 추가.
+형식: 날짜 | 버전 | 변경사항 | mAP | Kaggle Score</p>
+</blockquote>
+<hr/>
+<h2 id="실험-결과-테이블">실험 결과 테이블<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#실험-결과-테이블" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>날짜</th><th>버전</th><th>모델</th><th>변경사항</th><th>val<br/>mAP@50-90</th><th>val mAP@50</th><th>val<br/>mAP@50-90 (ema)</th><th>val mAP@50 (ema)</th><th>epoch</th><th>Kaggle Score</th><th>비고</th></tr></thead><tbody><tr><td>-</td><td>v1.0</td><td>YOLOv8n</td><td>파이프라인 첫 완성</td><td>0.17</td><td>-</td><td>-</td><td>-</td><td>50</td><td>0.17</td><td>제출</td></tr><tr><td>5.26</td><td>v2.1</td><td>YOLOv8n</td><td>transforms 증강, ultralytics 모자이크 증강, 학습할때 페이즈별 (페이즈1: head의 cv3 마지막 레이어만 파인튜닝, 페이즈2:헤드만 파인튜닝, 페이즈3: 백본 + 넥 + 헤드(lr을 낮게줘서 파인튜닝)), 각 페이즈마다 lr 스케줄링, adamw(cousin, momentum, weight decay)</td><td>0.416841</td><td>0.467583</td><td>-</td><td>-</td><td>50</td><td>0.53967</td><td>테스트 데이터가 복잡한 구성이 아니라서 모자이크를 하면 예측 성능이 떨어질것으로 예상.</td></tr><tr><td>5.26</td><td>v2.2</td><td>YOLOv8n</td><td>모자이크 x</td><td>0.582</td><td>0.66</td><td>-</td><td>-</td><td>50</td><td>0.698</td><td>모자이크 제거 후 성능 향상 확인</td></tr><tr><td>5.27</td><td>v2.2</td><td>YOLOv8n</td><td>Ultralytics NMS 적용 후 후처리 조건 시각화 비교(A: conf=0.25/iou=0.7/class-aware, B: class-agnostic, C/D: conf=0.10 및 iou 조정). A 조건이 가장 안정적이어서 기본값 유지 판단</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>Kaggle에 올리지 않음. train 샘플 5장 시각화 비교만 진행</td></tr><tr><td>5.27</td><td>v2.2</td><td>YOLOv8n</td><td>Ultralytics NMS + class_agnostic_nms=True + bbox clamp + max_box_area_ratio 후처리 시각화 비교. 큰 이상 bbox 제거에는 효과가 있었지만 전체적으로 기본 적용할 만큼의 일관된 개선은 크지 않아 보류 판단</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>Kaggle에 올리지 않음. train 샘플 5장 시각화 비교만 진행</td></tr><tr><td>5.28</td><td>v2.3</td><td>YOLOv8n</td><td>phase3 eval bn 5 epochs, phase3 warmup 5 epochs</td><td></td><td></td><td></td><td></td><td></td><td>0.67</td><td></td></tr><tr><td></td><td>v2.4</td><td>YOLOv8n</td><td>Phase 3에서 BN freeze 해제(ep 36)랑 warmup LR 최고점이 같은 에폭에 겹쳐서loss가튐.phase3_bn_frozen_epochs: 8로 올려서 둘을 분리하는 게 LR<br/>  줄이는 것보다 효과적일것같았다.</td><td>0.509169</td><td>0.581095</td><td>0.545381</td><td>0.615149</td><td>50</td><td>0.72191</td><td></td></tr><tr><td></td><td>v2.5</td><td>YOLOv8s</td><td>epoch 200, YOLOv8s</td><td>0.924632</td><td>0.979181</td><td>0.924762</td><td>0.979181</td><td>200</td><td>0.91630</td><td></td></tr><tr><td></td><td>v2.7.2</td><td>YOLOv8l</td><td>epoch 100, YOLOv8l</td><td></td><td></td><td></td><td></td><td></td><td>0.92910</td><td></td></tr><tr><td></td><td>v2.7</td><td>YOLOv8l</td><td>epoch 100, YOLOv8l</td><td></td><td></td><td></td><td></td><td></td><td>0.92910</td><td></td></tr><tr><td>5.28</td><td>v2.7.3-ft</td><td>YOLOv8l</td><td>best_model(V2.7.3).pt 기준 30 epoch 추가 fine-tuning 3종 비교. low lr, very low lr, low lr + weight_decay=0.0001 중 weight_decay=0.0001 조건이 가장 좋았음</td><td>0.958421</td><td>0.990983</td><td>0.955340</td><td>0.990983</td><td>30</td><td>-</td><td>Kaggle에 올리지 않음. 상세는 <a href="../tasks/issue-55" class="internal" data-slug="tasks/issue-55">issue-55</a></td></tr><tr><td>5.29</td><td>v2.7.3-ft-next</td><td>YOLOv8l</td><td>v2.7.3-ft 1등 조건 주변 5종 추가 비교. weight_decay=0.0001 유지 후 epoch 50까지 늘린 <code>ft_wd0001_e50</code>이 가장 좋았음</td><td>0.961320</td><td>0.990983</td><td>0.956287</td><td>0.990983</td><td>50</td><td>-</td><td>Kaggle에 올리지 않음. 상세는 <a href="../tasks/issue-55" class="internal" data-slug="tasks/issue-55">issue-55</a></td></tr><tr><td>5.29</td><td>v2.7.3-ft-final</td><td>YOLOv8l</td><td><code>ft_wd0001_e40</code>, <code>ft_wd0002_e40</code> 비교. <code>ft_wd0001_e40</code>이 raw/EMA 모두 현재 최고 validation 결과</td><td>0.967262</td><td>0.998497</td><td>0.966096</td><td>0.998497</td><td>40</td><td>-</td><td>Kaggle 제출 전 최종 후보. 상세는 <a href="../tasks/issue-55" class="internal" data-slug="tasks/issue-55">issue-55</a></td></tr><tr><td>5.29</td><td>v3-x</td><td>YOLOv8x</td><td>epoch 350, batch 8, phase1/2 lr 0.00007, phase3 head lr 0.000007, backbone lr 0.0000007, weight_decay 0.0001</td><td>0.972152</td><td>1.000000</td><td>0.967968</td><td>1.000000</td><td>350</td><td>-</td><td>validation 기준 최고. mAP50=1.0으로 과적합 가능성 함께 고려</td></tr><tr><td>5.29</td><td>v4</td><td>YOLOv8l</td><td>1. 에폭 350, 페이즈 1 lr : 0.0001, 페이즈 2 lr : 0.0001, 페이즈 3 헤드 : 0.00001, 페이즈 3 백본 : 0.000001, decay : 0.0001, 배치사이즈 : 8<br/>2. 에폭 350, 페이즈 1 lr : 0.0001, 페이즈 2 lr : 0.0001, 페이즈 3 헤드 : 0.00001, 페이즈 3 백본 : 0.000001, decay : 0.0001, 배치사이즈 : 16<br/>3. 에폭 350, 페이즈 1 lr : 0.001, 페이즈 2 lr : 0.001, 페이즈 3 헤드 : 0.0001, 페이즈 3 백본 : 0.00001, decay : 0.001, 배치사이즈 : 8</td><td></td><td></td><td></td><td></td><td></td><td></td><td>앙상블</td></tr><tr><td>6.1</td><td>WBF-v1</td><td>YOLOv8l×8+x (9모델)</td><td>전체 앙상블 WBF. iou_thr=0.5, skip_box_thr=0.25, 가중치 2/1 (mAP 기준)</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>0.95646</td><td>val 최고(0.9745) 대비 test 낮음. 약한 모델 포함 영향 의심</td></tr><tr><td>6.1</td><td>v4.2-x-ema</td><td>YOLOv8x</td><td>ep350 단일 제출 (EMA best=343)</td><td>-</td><td>-</td><td>0.9679</td><td>0.9980</td><td>350</td><td>0.93430</td><td>val(0.972) vs test(0.934) 괴리 큼. val loss 곡선 미확인</td></tr><tr><td>6.1</td><td>WBF-v2</td><td>YOLOv8l×8+x (9모델)</td><td>iou_thr=0.55, skip_box_thr=0.3 조정</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>0.95500</td><td>WBF-v1(0.95646) 대비 하락. 파라미터 조정보다 모델 선별이 핵심</td></tr><tr><td>6.1</td><td>Q3-v8x</td><td>YOLOv8x</td><td>아키텍처 비교 A: wd=0.0001, head lr=1e-5, backbone lr=1e-6, batch=8, img=640</td><td>-</td><td>-</td><td>-</td><td>-</td><td>150</td><td>0.91650</td><td>Q3 기준선</td></tr><tr><td>6.1</td><td>Q3-v11x</td><td>YOLO11x</td><td>아키텍처 비교 B: 동일 하이퍼파라미터 (wd=0.0001, head lr=1e-5, backbone lr=1e-6, batch=8, img=640)</td><td>-</td><td>-</td><td>-</td><td>-</td><td>150</td><td>0.93817</td><td>Q3 우승 → Q4로</td></tr><tr><td>6.1</td><td>Q4-ep150</td><td>Q3 우승 아키텍처</td><td>과적합 진단 1/3: 처음부터 full train ep150</td><td>-</td><td>-</td><td>-</td><td>-</td><td>150</td><td>0.93817</td><td>Q4 결과 확인</td></tr><tr><td>6.1</td><td>Q4-ep200</td><td>Q3 우승 아키텍처</td><td>과적합 진단 2/3: 처음부터 full train ep200</td><td>-</td><td>-</td><td>-</td><td>-</td><td>200</td><td>0.94061</td><td>Q4 결과 확인</td></tr><tr><td>6.1</td><td>Q4-ep250</td><td>Q3 우승 아키텍처</td><td>과적합 진단 3/3: 처음부터 full train ep250</td><td>-</td><td>-</td><td>-</td><td>-</td><td>250</td><td>0.94325</td><td>ep200→250 +0.003 → plateau 진입 확인</td></tr><tr><td>6.2</td><td>Q4-ep600</td><td>YOLO11x</td><td>유재열 600ep 베이스라인</td><td>0.973</td><td>1.000</td><td>0.973</td><td>1.000</td><td>600</td><td>-</td><td>Kaggle 제출 전</td></tr><tr><td>6.2</td><td>Q4-ep700</td><td>YOLO11x</td><td>장기 학습 베이스라인: ep700, 증강 없음 (plateau·과적합 정확한 진입점 확인용)</td><td>0.975</td><td>1.000</td><td>0.975</td><td>1.000</td><td>700</td><td>0.93593</td><td><strong>과적합 확정.</strong> ep250(0.94325)보다 낮음. val_loss로는 못 잡힘 → 분석 아래 참고</td></tr><tr><td>6.4</td><td>Q5-synth-aug</td><td>YOLO11x</td><td>실험A: GrabCut 세그멘테이션 합성 증강. 640px, batch=8, max400ep(early_stop=50), LR 원본. pill_bank 역빈도 가중치. 합성이미지 3~4알약. Q4-ep700과 조건 동일(640px/batch8/LR원본), 증강만 다름 → 과적합 완화 검증</td><td>-</td><td>-</td><td>-</td><td>-</td><td>실행 중</td><td>실행 중</td><td>feature/synth-aug-400ep 브랜치. —synth_data 플래그 필요</td></tr><tr><td>6.4</td><td>Q5-highres</td><td>YOLO11x</td><td>실험B: 고해상도 학습. 1024px, batch=4, epoch=200, lr=0.0001, wd=0.0001. Q4 640 baseline 대비 해상도 변수 확인</td><td>0.972919</td><td>0.996994</td><td>0.968831</td><td>0.996994</td><td>200</td><td>-</td><td>Kaggle에 올리지 않음. best raw epoch=186, best EMA epoch=182. raw/EMA submission 생성</td></tr><tr><td>-</td><td>Q6</td><td>Q3 우승 아키텍처</td><td>vs 기존 데이터: AI Hub 허용 데이터 추가, ep=Q4 최적값. 금지: TL_2_조합.zip, TS_2_조합.zip</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>계획 중</td><td>Q5 완료 후 진행. 기준은 Q5 최적 결과</td></tr></tbody></table></div>
+<hr/>
+<h2 id="마일스톤-3-실험-전략">마일스톤 3 실험 전략<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#마일스톤-3-실험-전략" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<blockquote>
+<p><strong>베이스라인 재설정</strong>: 기존 ep350 학습 결과 초기화. ep150으로 새로 시작.<br/>
+<strong>실험 순서</strong>: Q3(아키텍처) → Q4(에폭 스캔 + 과적합 진단) → Q2 결과 확인 → Q1 → Q5 / Q6 (병렬)</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>Q</th><th>핵심 질문</th><th style="text-align:center;">상태</th><th>선행</th><th style="text-align:center;">예상 우위</th></tr></thead><tbody><tr><td>Q1</td><td>약한 모델(val 0.97↓) WBF에서 제외하면?</td><td style="text-align:center;">계획 중</td><td>Q2 결과</td><td style="text-align:center;">B > A</td></tr><tr><td>Q2</td><td>WBF iou/skip 파라미터 조정</td><td style="text-align:center;">결과 대기</td><td>—</td><td style="text-align:center;">—</td></tr><tr><td>Q3</td><td>YOLOv8x vs YOLO11x (ep150 동일 조건)</td><td style="text-align:center;"><strong>완료</strong></td><td>—</td><td style="text-align:center;">B(11x) 0.938 > A 0.917 ✓</td></tr><tr><td>Q4</td><td>Q3 우승 아키텍처로 ep150 → 200 → 250 과적합 진단</td><td style="text-align:center;"><strong>완료</strong></td><td>Q3</td><td style="text-align:center;">ep250 best 0.94325. plateau 도달 (ep200→250 +0.003)</td></tr><tr><td>Q5</td><td>img_size 640 → 1024 (빠른 비교)</td><td style="text-align:center;"><strong>진행/결과 기록</strong></td><td>Q4</td><td style="text-align:center;">B(1024) validation 개선, Kaggle 미확인</td></tr><tr><td>Q6</td><td>AI Hub 데이터 추가</td><td style="text-align:center;">계획 중</td><td>Q4</td><td style="text-align:center;">B(추가) > A</td></tr><tr><td>Q7</td><td>합성 mosaic 증강 추가 시 plateau 돌파하나?</td><td style="text-align:center;">계획 중</td><td>Q4</td><td style="text-align:center;">B(증강) > A</td></tr></tbody></table></div>
+<hr/>
+<h3 id="q1-앙상블--약한-모델-제거하면-더-오르나">Q1. 앙상블 — 약한 모델 제거하면 더 오르나?<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#q1-앙상블--약한-모델-제거하면-더-오르나" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th></th><th>설정</th><th>결과</th></tr></thead><tbody><tr><td><strong>A</strong></td><td>WBF-v1: 9모델 전체, iou=0.5, skip=0.25</td><td>Kaggle <strong>0.95646</strong></td></tr><tr><td><strong>B</strong></td><td>WBF-top: val 0.97↑ 4모델만, 동일 파라미터</td><td>계획 중</td></tr></tbody></table></div>
+<p><strong>가설</strong> V2.7.3(0.9506) · V4-2(0.9616) 포함 시 WBF 박스 위치 합의를 흐려 하락<br/>
+<strong>확인</strong> B > A → 모델 선별 효과 / B ≤ A → WBF 파라미터 문제<br/>
+<strong>예상</strong> B > A. 낮은 모델이 틀린 박스에 가중치를 줘서 앙상블 평균을 흐림.</p>
+<hr/>
+<h3 id="q2-wbf-파라미터가-최적인가">Q2. WBF 파라미터가 최적인가?<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#q2-wbf-파라미터가-최적인가" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th></th><th>설정</th><th>결과</th></tr></thead><tbody><tr><td><strong>A</strong></td><td>iou=0.5, skip=0.25, 동일 9모델</td><td>Kaggle <strong>0.95646</strong></td></tr><tr><td><strong>B</strong></td><td>iou=0.55, skip=0.3, 동일 9모델</td><td>Kaggle <strong>0.95500</strong></td></tr></tbody></table></div>
+<p><strong>결론</strong> B &lt; A. 파라미터 조정 효과 없음. 모델 선별(Q1)이 더 중요한 변수.</p>
+<hr/>
+<h3 id="q3-아키텍처-비교--yolov8x-vs-yolo11x-ep150">Q3. 아키텍처 비교 — YOLOv8x vs YOLO11x (ep150)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#q3-아키텍처-비교--yolov8x-vs-yolo11x-ep150" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<blockquote>
+<p>기존 ep350 결과 초기화. ep150으로 공정하게 재비교.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th></th><th>설정</th><th>val mAP</th><th>Kaggle</th></tr></thead><tbody><tr><td><strong>A</strong></td><td>YOLOv8x, ep150, wd=0.0001, head lr=1e-5, backbone lr=1e-6, batch=8, img=640</td><td>—</td><td>0.91650</td></tr><tr><td><strong>B</strong></td><td>YOLO11x, ep150, 동일 하이퍼파라미터</td><td>—</td><td>0.93817</td></tr></tbody></table></div>
+<p><strong>판단</strong> Kaggle test 점수로 우승 아키텍처 결정 → Q4로 넘김<br/>
+<strong>추가 분석</strong> 클래스별 F1 비교 — 어떤 아키텍처가 어떤 유형 알약에서 강한지 → <a href="../concepts/F1-Score" class="internal alias" data-slug="concepts/F1-Score">F1 Score</a><br/>
+<strong>예상</strong> B(YOLO11x) > A. 최신 아키텍처라 특징 추출 효율이 높을 것.</p>
+<hr/>
+<h3 id="q4-과적합-진단--q3-우승-아키텍처로-ep150--200--250">Q4. 과적합 진단 — Q3 우승 아키텍처로 ep150 / 200 / 250<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#q4-과적합-진단--q3-우승-아키텍처로-ep150--200--250" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<blockquote>
+<p>3번 모두 처음부터 full train. phase 구조상 이어받기 불가.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th></th><th>설정</th><th>val mAP@50-90</th><th>Kaggle</th></tr></thead><tbody><tr><td><strong>ep150</strong></td><td>Q3 우승 아키텍처, 처음부터 ep150 full train</td><td>—</td><td>0.93817</td></tr><tr><td><strong>ep200</strong></td><td>동일 설정, 처음부터 ep200 full train</td><td>—</td><td>0.94061</td></tr><tr><td><strong>ep250</strong></td><td>동일 설정, 처음부터 ep250 full train</td><td>—</td><td>0.94325</td></tr><tr><td><strong>ep600</strong></td><td>동일 설정, 처음부터 ep600 full train</td><td>0.973</td><td>-</td></tr><tr><td><strong>ep700</strong></td><td>동일 설정, 처음부터 ep700 full train</td><td>0.975</td><td><strong>0.93593</strong> ↓</td></tr></tbody></table></div>
+<p><strong>판단 기준</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>패턴</th><th>해석</th><th>다음 행동</th></tr></thead><tbody><tr><td>test 점수가 ep마다 계속 오름</td><td>아직 plateau 전</td><td>ep250 또는 그 이상 추가 탐색</td></tr><tr><td>test 점수가 어느 ep에서 멈추거나 하락</td><td>과적합 시작</td><td>해당 ep = 최적 epoch 확정</td></tr></tbody></table></div>
+<p><strong>예상</strong> 과적합. 높은 val mAP@50=1.0이 이미 이상 신호. test 점수는 ep200~250 구간에서 주춤할 것으로 예상.</p>
+<p><strong>WandB 분석 결과 (2026-06-02)</strong> ep200→250: Kaggle +0.00264 (0.94061→0.94325). val_loss gap 양수 유지 (val > train) → 250ep 내 명확한 과적합 미확인.<br/>
+<strong>결론</strong> plateau 진입 추정. 기존 데이터에서 뽑을 수 있는 신호 소진 가능성 → 700ep로 검증 중.</p>
+<p><strong>판정 기준 (WandB 모니터링)</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>상태</th><th>기준</th><th>액션</th></tr></thead><tbody><tr><td><strong>plateau</strong></td><td>연속 50 epoch 동안 <code>val/mAP_ema</code> 최대 상승폭 &lt; 0.002</td><td>해당 epoch = 최적 epoch로 확정</td></tr><tr><td><strong>과적합</strong></td><td><code>val/mAP_ema</code> 연속 10 epoch 이상 하락 추세</td><td>하락 시작 직전 epoch = 최적 epoch로 확정</td></tr><tr><td><strong>정상 학습</strong></td><td>위 두 조건 미해당</td><td>계속 학습</td></tr></tbody></table></div>
+<p><strong>결론 (2026-06-02 확정)</strong> ep700 Kaggle 0.93593으로 ep250(0.94325)보다 낮음 → <strong>과적합 확정. 최적 epoch = 250.</strong><br/>
+→ Q5·Q6·Q7 공통 epoch 기준 = <strong>250</strong>으로 확정</p>
+<hr/>
+<h4 id="q4-과적합-분석">Q4 과적합 분석<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#q4-과적합-분석" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p><strong>결론: 과적합 맞음. 단, loss 그래프에서는 안 보이는 유형.</strong></p>
+<pre><code>loss 기준  → 과적합 아님  (overfit/loss_gap ≈ 0)
+Kaggle 기준 → 과적합 맞음  (ep250 0.94325 > ep700 0.93593)
+</code></pre>
+<p><strong>왜 loss에서 안 잡혔나:</strong></p>
+<pre><code>val_mAP@50 = 1.0  (에폭 200부터 포화)
+              ↑
+ 이 시점부터 val이 과적합 감지 불능
+</code></pre>
+<p>에폭 200 이후 val set이 너무 쉬워져서 mAP@50 = 1.0 고정. val_loss가 계속 내려가는 것처럼 보여도 실제론 val set을 암기하는 것. Kaggle test는 다른 분포라 거기서 갭이 드러난 것.</p>
+<p>즉, 에폭 200 이후로는 val loss가 아니라 <strong>Kaggle score가 유일한 early stop 기준</strong>이었던 것이고, 진짜 early stopping point ≈ 250에폭이었다.</p>
+<p><strong>이 프로젝트에서 쓸 수 있는 진짜 신호:</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>신호</th><th>쓸 수 있나</th><th>이유</th></tr></thead><tbody><tr><td>val_loss 상승</td><td>❌</td><td>val 포화로 신호 없음</td></tr><tr><td>val_mAP@50</td><td>❌</td><td>에폭 200부터 1.0 고정</td></tr><tr><td>val_mAP@0.5:0.95</td><td>△</td><td>느리게 올라가긴 함</td></tr><tr><td><strong>Kaggle score</strong></td><td>✅</td><td>유일한 진짜 신호</td></tr></tbody></table></div>
+<p>val set이 186장 중 20%인 ~37장 수준이라 너무 작고 쉬워서 loss 기반 early stopping 자체가 이 프로젝트에선 한계가 있다.</p>
+<p><strong>추가: train_loss oscillation 심함</strong></p>
+<p>초반부터 전 구간에 걸쳐 train_loss가 에폭마다 오르락내리락이 심하다. 주원인은 <strong>batch_size=8</strong>. 배치가 작을수록 각 배치의 gradient 방향이 들쭉날쭉해서 loss가 oscillate한다. Phase 전환 시점에도 LR 리셋으로 튀는 구간이 있다. best checkpoint 선택이 어려워지고 수렴이 느려지는 원인. gradient accumulation으로 effective batch를 키우면 안정화 가능 (batch=8 + accumulation=4 → effective batch=32).</p>
+<hr/>
+<h3 id="q5-해상도-1024가-성능-개선되나">Q5. 해상도 1024가 성능 개선되나?<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#q5-해상도-1024가-성능-개선되나" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th></th><th>설정</th><th>결과</th></tr></thead><tbody><tr><td><strong>A</strong></td><td>Q3 우승 아키텍처, img=640, batch=8, ep=Q4 최적</td><td>Q4 결과 그대로</td></tr><tr><td><strong>B</strong></td><td>동일 아키텍처, img=1024, batch=4, ep=200</td><td>val raw 0.972919 / EMA 0.968831, Kaggle 미제출</td></tr></tbody></table></div>
+<p><strong>선행</strong> Q4 완료 ✓. 700ep 베이스라인 완료 후 최적 epoch 확정 → 착수 예정<br/>
+<strong>운영 방침</strong> 빠르게: ep=Q4 최적값 고정, 640 vs 1024 단일 비교만. 추가 sweep 없음.<br/>
+<strong>추가 분석</strong> Q3에서 F1 낮은 클래스(각인·텍스트 유형)가 1024에서 개선되는지 집중 확인 → <a href="../concepts/F1-Score" class="internal alias" data-slug="concepts/F1-Score">F1 Score</a><br/>
+<strong>예상</strong> B(1024) > A. 각인·텍스트 세부 특징이 살아남아 클래스 구분력 높아질 것. 단 batch=4 → 학습 안정성 주의.</p>
+<hr/>
+<h3 id="q6-ai-hub-추가-데이터가-성능을-높이나">Q6. AI Hub 추가 데이터가 성능을 높이나?<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#q6-ai-hub-추가-데이터가-성능을-높이나" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th></th><th>설정</th><th>결과</th></tr></thead><tbody><tr><td><strong>A</strong></td><td>Q3 우승 아키텍처, 기존 대회 데이터만, ep=Q4 최적</td><td>Q4 결과 그대로</td></tr><tr><td><strong>B</strong></td><td>동일 아키텍처, AI Hub 허용 데이터 추가, ep=Q4 최적</td><td>계획 중</td></tr></tbody></table></div>
+<p><strong>조건</strong> <code>TL_2_조합.zip</code> · <code>TS_2_조합.zip</code> 사용 금지 / 허용 데이터셋 목록 먼저 확인<br/>
+<strong>선행</strong> Q4 완료 후 진행<br/>
+<strong>추가 분석</strong> Q3 클래스별 F1이 낮은 클래스 = 데이터 부족 가능성 → 해당 클래스 AI Hub 데이터 우선 확보 → <a href="../concepts/F1-Score" class="internal alias" data-slug="concepts/F1-Score">F1 Score</a><br/>
+<strong>예상</strong> B(추가 데이터) > A. 학습 데이터가 늘면 일반화 성능 향상. F1 낮은 클래스에 데이터 보강되면 test 점수 격차 줄어들 것.</p>
+<hr/>
+<h3 id="q7-합성-mosaic-증강--plateau-돌파하나">Q7. 합성 mosaic 증강 — plateau 돌파하나?<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#q7-합성-mosaic-증강--plateau-돌파하나" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<blockquote>
+<p>Q4 결론: plateau = 기존 데이터 신호 소진. 모델 용량 문제가 아닌 데이터 다양성 문제 → 합성 데이터로 검증.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th></th><th>설정</th><th>결과</th></tr></thead><tbody><tr><td><strong>A</strong></td><td>YOLO11x, ep=700ep 최적값, 증강 없음 (700ep 베이스라인 결과)</td><td>진행 중</td></tr><tr><td><strong>B</strong></td><td>동일 아키텍처, ep=동일, 합성 mosaic 데이터 추가 (SynthPillDataset)</td><td>계획 중</td></tr></tbody></table></div>
+<p><strong>가설</strong> 다양한 배경·위치·구성으로 mosaic 합성하면 val-test 간 일반화 격차가 줄어 test score 상승.<br/>
+<strong>방법</strong> <code>scripts/build_synth_dataset.py</code>: GrabCut segmentation → pill bank → mosaic 합성 → COCO 어노테이션 → <code>SynthPillDataset</code>으로 ConcatDataset<br/>
+<strong>비교 기준</strong> Kaggle test score A vs B (동일 epoch, 동일 하이퍼파라미터, 데이터만 다름)<br/>
+<strong>주목 지점</strong> plateau가 깨지면 합성 데이터 규모 확대 고려. 클래스별 F1에서 어떤 클래스가 개선되는지 확인.<br/>
+<strong>선행</strong> Q4 완료 ✓. 700ep 베이스라인 완료 후 착수 (최적 epoch 확정 필요)</p>
+<hr/>
+<h3 id="공통-제출-전-f1-곡선으로-최적-conf-threshold-확인">공통: 제출 전 F1 곡선으로 최적 conf threshold 확인<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#공통-제출-전-f1-곡선으로-최적-conf-threshold-확인" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li><strong>시점</strong> 각 실험의 best 모델이 나올 때마다 1회</li>
+<li><strong>방법</strong> conf=0.05~0.90 구간에서 val F1 계산 (IoU=0.5 고정) → F1 최대 지점 = 최적 conf</li>
+<li><strong>반영</strong> <code>postprocess.conf_threshold</code> 업데이트 후 제출 / WBF <code>skip_box_thr</code>도 동일 방식 최적화 가능</li>
+<li><strong>근거</strong> conf=0.25는 관행적 기본값, 모델마다 최적값 다를 수 있음 → <a href="../concepts/F1-Score" class="internal alias" data-slug="concepts/F1-Score">F1 Score</a></li>
+</ul>
+<hr/>
+<h2 id="v01--파이프라인-완성">v0.1 — 파이프라인 완성<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#v01--파이프라인-완성" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li><strong>목표</strong>: train → predict → submission.csv 까지 동작</li>
+<li><strong>모델</strong>: YOLOv8n (가장 가벼운 것부터)</li>
+<li><strong>데이터</strong>: 원본 그대로, 증강 없음</li>
+<li><strong>결과</strong>: (제출 후 기록)</li>
+<li><strong>다음 시도</strong>:</li>
+</ul>
+<hr/>
+<h2 id="v02--성능-개선-예정">v0.2 — 성능 개선 (예정)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#v02--성능-개선-예정" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>데이터 증강 추가 (Albumentations)</li>
+<li>모델 크기 업 (yolov8n → yolov8s → yolov8m)</li>
+<li>하이퍼파라미터 튜닝</li>
+<li>추가 데이터 수집 (AI Hub — 금지 데이터셋 제외)</li>
+</ul>
+<hr/>
+<h2 id="실험-기록-방법">실험 기록 방법<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#실험-기록-방법" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="bash" data-theme="github-light github-dark"><code data-language="bash" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;"># Kaggle 제출 전 태그 남기기</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">git</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> tag</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> v0.1-submission</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">git</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> push</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> origin</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> v0.1-submission</span></span>
+<span data-line> </span>
+<span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;"># outputs/submissions/ 에 버전 명시해서 저장</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">submission_v1_yolov8n_baseline.csv</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">submission_v2_yolov8s_augmented.csv</span></span></code></pre></figure>
+<hr/>
+<h2 id="connections">Connections<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#connections" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li><a href="../프로젝트-개요" class="internal alias" data-slug="프로젝트-개요">프로젝트 개요</a></li>
+<li><a href="../architecture/모듈-설계" class="internal alias" data-slug="architecture/모듈-설계">모듈 설계</a></li>
+</ul></article><hr/><div class="page-footer"></div></div><div class="right sidebar"><div class="graph"><h3>그래프 뷰</h3><div class="graph-outer"><div class="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false,&quot;enableRadial&quot;:false}"></div><button class="global-graph-icon" aria-label="Global Graph"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xml:space="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+                s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+                c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+                C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+                c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+                v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+                s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+                C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+                S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+                s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+                s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></button></div><div class="global-graph-outer"><div class="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.2,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true,&quot;enableRadial&quot;:true}"></div></div></div><div class="toc desktop-only"><button type="button" class="toc-header" aria-controls="toc-23" aria-expanded="true"><h3>목차</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><ul id="list-1" class="toc-content overflow"><li class="depth-0"><a href="#실험-로그" data-for="실험-로그">실험 로그</a></li><li class="depth-1"><a href="#실험-결과-테이블" data-for="실험-결과-테이블">실험 결과 테이블</a></li><li class="depth-1"><a href="#마일스톤-3-실험-전략" data-for="마일스톤-3-실험-전략">마일스톤 3 실험 전략</a></li><li class="depth-2"><a href="#q1-앙상블--약한-모델-제거하면-더-오르나" data-for="q1-앙상블--약한-모델-제거하면-더-오르나">Q1. 앙상블 — 약한 모델 제거하면 더 오르나?</a></li><li class="depth-2"><a href="#q2-wbf-파라미터가-최적인가" data-for="q2-wbf-파라미터가-최적인가">Q2. WBF 파라미터가 최적인가?</a></li><li class="depth-2"><a href="#q3-아키텍처-비교--yolov8x-vs-yolo11x-ep150" data-for="q3-아키텍처-비교--yolov8x-vs-yolo11x-ep150">Q3. 아키텍처 비교 — YOLOv8x vs YOLO11x (ep150)</a></li><li class="depth-2"><a href="#q4-과적합-진단--q3-우승-아키텍처로-ep150--200--250" data-for="q4-과적합-진단--q3-우승-아키텍처로-ep150--200--250">Q4. 과적합 진단 — Q3 우승 아키텍처로 ep150 / 200 / 250</a></li><li class="depth-2"><a href="#q5-해상도-1024가-성능-개선되나" data-for="q5-해상도-1024가-성능-개선되나">Q5. 해상도 1024가 성능 개선되나?</a></li><li class="depth-2"><a href="#q6-ai-hub-추가-데이터가-성능을-높이나" data-for="q6-ai-hub-추가-데이터가-성능을-높이나">Q6. AI Hub 추가 데이터가 성능을 높이나?</a></li><li class="depth-2"><a href="#q7-합성-mosaic-증강--plateau-돌파하나" data-for="q7-합성-mosaic-증강--plateau-돌파하나">Q7. 합성 mosaic 증강 — plateau 돌파하나?</a></li><li class="depth-2"><a href="#공통-제출-전-f1-곡선으로-최적-conf-threshold-확인" data-for="공통-제출-전-f1-곡선으로-최적-conf-threshold-확인">공통: 제출 전 F1 곡선으로 최적 conf threshold 확인</a></li><li class="depth-1"><a href="#v01--파이프라인-완성" data-for="v01--파이프라인-완성">v0.1 — 파이프라인 완성</a></li><li class="depth-1"><a href="#v02--성능-개선-예정" data-for="v02--성능-개선-예정">v0.2 — 성능 개선 (예정)</a></li><li class="depth-1"><a href="#실험-기록-방법" data-for="실험-기록-방법">실험 기록 방법</a></li><li class="depth-1"><a href="#connections" data-for="connections">Connections</a></li><li class="overflow-end"></li></ul></div><div class="backlinks"><h3>백링크</h3><ul id="list-2" class="overflow"><li><a href="../workflow/운영-결정사항" class="internal">운영 결정사항</a></li><li><a href="../프로젝트-개요" class="internal">프로젝트 개요</a></li><li><a href="../홈" class="internal">홈</a></li><li class="overflow-end"></li></ul></div></div><footer class><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.5.2</a> © 2026</p><ul><li><a href="https://github.com/jackyzha0/quartz">GitHub</a></li><li><a href="https://discord.gg/cRFFHYye7t">Discord Community</a></li></ul></footer></div></div></body><script type="application/javascript" data-persist="true">function n(){let t=this.parentElement;t.classList.toggle("is-collapsed");let e=t.getElementsByClassName("callout-content")[0];if(!e)return;let l=t.classList.contains("is-collapsed");e.style.gridTemplateRows=l?"0fr":"1fr"}function c(){let t=document.getElementsByClassName("callout is-collapsible");for(let e of t){let l=e.getElementsByClassName("callout-title")[0],s=e.getElementsByClassName("callout-content")[0];if(!l||!s)continue;l.addEventListener("click",n),window.addCleanup(()=>l.removeEventListener("click",n));let o=e.classList.contains("is-collapsed");s.style.gridTemplateRows=o?"0fr":"1fr"}}document.addEventListener("nav",c);
+</script><script type="module" data-persist="true">function E(a,e){if(!a)return;function t(o){o.target===this&&(o.preventDefault(),o.stopPropagation(),e())}function n(o){o.key.startsWith("Esc")&&(o.preventDefault(),e())}a?.addEventListener("click",t),window.addCleanup(()=>a?.removeEventListener("click",t)),document.addEventListener("keydown",n),window.addCleanup(()=>document.removeEventListener("keydown",n))}function f(a){for(;a.firstChild;)a.removeChild(a.firstChild)}var m=class{constructor(e,t){this.container=e;this.content=t;this.setupEventListeners(),this.setupNavigationControls(),this.resetTransform()}isDragging=!1;startPan={x:0,y:0};currentPan={x:0,y:0};scale=1;MIN_SCALE=.5;MAX_SCALE=3;cleanups=[];setupEventListeners(){let e=this.onMouseDown.bind(this),t=this.onMouseMove.bind(this),n=this.onMouseUp.bind(this),o=this.onTouchStart.bind(this),r=this.onTouchMove.bind(this),i=this.onTouchEnd.bind(this),s=this.resetTransform.bind(this);this.container.addEventListener("mousedown",e),document.addEventListener("mousemove",t),document.addEventListener("mouseup",n),this.container.addEventListener("touchstart",o,{passive:!1}),document.addEventListener("touchmove",r,{passive:!1}),document.addEventListener("touchend",i),window.addEventListener("resize",s),this.cleanups.push(()=>this.container.removeEventListener("mousedown",e),()=>document.removeEventListener("mousemove",t),()=>document.removeEventListener("mouseup",n),()=>this.container.removeEventListener("touchstart",o),()=>document.removeEventListener("touchmove",r),()=>document.removeEventListener("touchend",i),()=>window.removeEventListener("resize",s))}cleanup(){for(let e of this.cleanups)e()}setupNavigationControls(){let e=document.createElement("div");e.className="mermaid-controls";let t=this.createButton("+",()=>this.zoom(.1)),n=this.createButton("-",()=>this.zoom(-.1)),o=this.createButton("Reset",()=>this.resetTransform());e.appendChild(n),e.appendChild(o),e.appendChild(t),this.container.appendChild(e)}createButton(e,t){let n=document.createElement("button");return n.textContent=e,n.className="mermaid-control-button",n.addEventListener("click",t),window.addCleanup(()=>n.removeEventListener("click",t)),n}onMouseDown(e){e.button===0&&(this.isDragging=!0,this.startPan={x:e.clientX-this.currentPan.x,y:e.clientY-this.currentPan.y},this.container.style.cursor="grabbing")}onMouseMove(e){this.isDragging&&(e.preventDefault(),this.currentPan={x:e.clientX-this.startPan.x,y:e.clientY-this.startPan.y},this.updateTransform())}onMouseUp(){this.isDragging=!1,this.container.style.cursor="grab"}onTouchStart(e){if(e.touches.length!==1)return;this.isDragging=!0;let t=e.touches[0];this.startPan={x:t.clientX-this.currentPan.x,y:t.clientY-this.currentPan.y}}onTouchMove(e){if(!this.isDragging||e.touches.length!==1)return;e.preventDefault();let t=e.touches[0];this.currentPan={x:t.clientX-this.startPan.x,y:t.clientY-this.startPan.y},this.updateTransform()}onTouchEnd(){this.isDragging=!1}zoom(e){let t=Math.min(Math.max(this.scale+e,this.MIN_SCALE),this.MAX_SCALE),n=this.content.getBoundingClientRect(),o=n.width/2,r=n.height/2,i=t-this.scale;this.currentPan.x-=o*i,this.currentPan.y-=r*i,this.scale=t,this.updateTransform()}updateTransform(){this.content.style.transform=`translate(${this.currentPan.x}px, ${this.currentPan.y}px) scale(${this.scale})`}resetTransform(){let t=this.content.querySelector("svg").getBoundingClientRect(),n=t.width/this.scale,o=t.height/this.scale;this.scale=1,this.currentPan={x:(this.container.clientWidth-n)/2,y:(this.container.clientHeight-o)/2},this.updateTransform()}},T=["--secondary","--tertiary","--gray","--light","--lightgray","--highlight","--dark","--darkgray","--codeFont"],y;document.addEventListener("nav",async()=>{let e=document.querySelector(".center").querySelectorAll("code.mermaid");if(e.length===0)return;y||=await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.esm.min.mjs");let t=y.default,n=new WeakMap;for(let r of e)n.set(r,r.innerText);async function o(){for(let s of e){s.removeAttribute("data-processed");let c=n.get(s);c&&(s.innerHTML=c)}let r=T.reduce((s,c)=>(s[c]=window.getComputedStyle(document.documentElement).getPropertyValue(c),s),{}),i=document.documentElement.getAttribute("saved-theme")==="dark";t.initialize({startOnLoad:!1,securityLevel:"loose",theme:i?"dark":"base",themeVariables:{fontFamily:r["--codeFont"],primaryColor:r["--light"],primaryTextColor:r["--darkgray"],primaryBorderColor:r["--tertiary"],lineColor:r["--darkgray"],secondaryColor:r["--secondary"],tertiaryColor:r["--tertiary"],clusterBkg:r["--light"],edgeLabelBackground:r["--highlight"]}}),await t.run({nodes:e})}await o(),document.addEventListener("themechange",o),window.addCleanup(()=>document.removeEventListener("themechange",o));for(let r=0;r<e.length;r++){let v=function(){let g=l.querySelector("#mermaid-space"),h=l.querySelector(".mermaid-content");if(!h)return;f(h);let w=i.querySelector("svg").cloneNode(!0);h.appendChild(w),l.classList.add("active"),g.style.cursor="grab",u=new m(g,h)},M=function(){l.classList.remove("active"),u?.cleanup(),u=null},i=e[r],s=i.parentElement,c=s.querySelector(".clipboard-button"),d=s.querySelector(".expand-button"),p=window.getComputedStyle(c),L=c.offsetWidth+parseFloat(p.marginLeft||"0")+parseFloat(p.marginRight||"0");d.style.right=`calc(${L}px + 0.3rem)`,s.prepend(d);let l=s.querySelector("#mermaid-container");if(!l)return;let u=null;d.addEventListener("click",v),E(l,M),window.addCleanup(()=>{u?.cleanup(),d.removeEventListener("click",v)})}});
+</script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/copy-tex.min.js" type="application/javascript" data-persist="true"></script><script src="../postscript.js" type="module" data-persist="true"></script></html>
