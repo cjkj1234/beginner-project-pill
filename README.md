@@ -14,6 +14,7 @@
 | **데이터** | 학습 이미지 232장 · 박스 763개 · 56개 클래스 / 테스트 이미지 842장 |
 | **제출 횟수** | 22회 |
 | **발표 자료** | [최종 발표 슬라이드](https://cjkj1234.github.io/beginner-project-pill/slides/health-eat-final.html) · [W&B 실험 리포트](https://cjkj1234.github.io/beginner-project-pill/slides/health-eat-wandb-report.html) |
+| **서빙** | [pill-detect-serving](https://github.com/cjkj1234/pill-detect-serving) — ONNX + FastAPI + Streamlit + Docker |
 
 ---
 
@@ -106,6 +107,7 @@ flowchart LR
 ├── configs/
 │   ├── default.yaml          # 팀 저장소 마지막 설정 (1280px 실험, 미제출)
 │   ├── yolo11x_1024.yaml     # 단일 모델 최고점 설정 (Q5-B, 0.949)
+│   ├── yolo11s_640_serving.yaml # 서빙 데모용 설정 (CPU 속도 우선, 아직 학습 전)
 │   ├── class_mapping.json    # Kaggle category_id ↔ 학습용 class_id (56종)
 │   └── bbox_corrections.json # 라벨 보정 12건
 ├── src/
@@ -114,7 +116,7 @@ flowchart LR
 │   ├── engine/               # 학습 1 epoch, EMA, 평가(mAP·F1), 추론, 후처리, 체크포인트
 │   ├── submission/           # Kaggle CSV 생성
 │   └── utils/                # 설정 로더, bbox 변환, 시드, 클래스 가중치
-├── scripts/                  # GrabCut 합성 데이터 생성, W&B 유틸
+├── scripts/                  # ONNX 내보내기, GrabCut 합성 데이터 생성, W&B 유틸
 ├── notebooks/                # 데이터 구조·EDA, Colab 학습·제출, 앙상블 제출
 ├── tests/                    # pytest (GitHub Actions에서 자동 실행)
 └── slides/                   # 발표 자료 (GitHub Pages로 배포)
@@ -163,6 +165,16 @@ uv run python predict.py --config configs/yolo11x_1024.yaml --checkpoint outputs
 uv run python ensemble_wbf.py --preds pred_a.json pred_b.json --weights 2 1 --output outputs/submissions/submission_wbf.csv
 ```
 
+**ONNX 내보내기 (서빙용)** — 체크포인트를 [pill-detect-serving](https://github.com/cjkj1234/pill-detect-serving)이 읽는 ONNX로 바꿉니다.
+
+```bash
+uv sync --group export
+uv run python scripts/export_onnx.py --config configs/yolo11s_640_serving.yaml --checkpoint outputs/checkpoints/best_model.pt --use-ema --output outputs/export/model.onnx
+```
+
+- Ultralytics exporter와 같은 방식으로 Conv+BN을 합치고 Detect head를 export 모드로 바꿔 내보냅니다. 클래스 매핑 파일도 옆에 복사합니다.
+- 내보낸 뒤 같은 입력에서 PyTorch와 ONNX Runtime 출력을 비교합니다. YOLO11s 구조(학습 전 가중치)로 확인했을 때 박스 차이 0.0007px, 점수 차이 0.000003이었습니다.
+
 **테스트**
 
 ```bash
@@ -202,3 +214,4 @@ PyTorch · Ultralytics (YOLOv8 / YOLO11) · Albumentations · OpenCV · torchmet
   - 박스가 나온 앵커를 추측해서, 같은 클래스 박스가 둘 이상이면 다른 박스의 분포를 받았습니다. 이제 NMS가 돌려주는 앵커 번호(`return_idxs`)를 씁니다.
   - Ultralytics NMS가 입력 텐서의 박스 좌표를 제자리에서 바꿔서, 호출한 쪽 출력까지 바뀌었습니다. 이제 복사본을 넘깁니다.
   - 기존 `predictions.json`은 이전 방식의 값이라, 새로 만든 파일과 한 앙상블에 섞지 않아야 합니다.
+- 서빙용 ONNX 내보내기 스크립트(`scripts/export_onnx.py`)와 서빙 데모용 설정(`configs/yolo11s_640_serving.yaml`)을 추가했습니다. 서빙은 별도 저장소 [pill-detect-serving](https://github.com/cjkj1234/pill-detect-serving)에 있습니다.

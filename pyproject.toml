@@ -31,5 +31,11 @@ dev = [
     "pytest>=8.0.0",
 ]
 
+# 서빙용 ONNX 내보내기 (scripts/export_onnx.py): uv sync --group export
+export = [
+    "onnx>=1.16.0",
+    "onnxruntime>=1.20.0",
+]
+
 [tool.uv]
 default-groups = ["dev"]
