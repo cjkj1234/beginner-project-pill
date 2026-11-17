@@ -37,7 +37,7 @@ def main():
     state_key = "ema_state" if use_ema else "model_state"
     print(f"가중치: {'EMA' if use_ema else 'raw'}")
 
-    model = build_model(cfg["data"]["nc"])
+    model = build_model(cfg["data"]["nc"], model_name=cfg["model"]["name"])
     model.load_state_dict(checkpoint[state_key])
     model.to(device)
     model.eval()
@@ -102,5 +102,6 @@ def main():
     print(f"submission.csv 저장: {submission_path}")
 
 
-main()
+if __name__ == "__main__":
+    main()
 

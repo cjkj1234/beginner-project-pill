@@ -209,4 +209,5 @@ def main():
     print(f"저장 완료: {output_path}")
 
 
-main()
+if __name__ == "__main__":
+    main()

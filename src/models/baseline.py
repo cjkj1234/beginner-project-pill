@@ -66,9 +66,15 @@ def unfreeze_all(model: nn.Module) -> None:
         param.requires_grad = True
 
 
-def build_model(num_classes: int) -> torch.nn.Module:
-    cfg = load_config(validate=False)
-    model_name = cfg["model"]["name"]
+def build_model(num_classes: int, model_name: str | None = None) -> torch.nn.Module:
+    """COCO pretrained YOLO를 불러와 Detect head를 num_classes에 맞게 바꾼다.
+
+    model_name을 넘기지 않으면 configs/default.yaml의 model.name을 쓴다.
+    train.py / predict.py는 --config로 받은 설정의 model.name을 넘겨서,
+    다른 설정 파일을 써도 모델 이름이 default.yaml로 고정되지 않게 한다.
+    """
+    if model_name is None:
+        model_name = load_config(validate=False)["model"]["name"]
 
     yolo = YOLO(f"{model_name}.pt")
     model = yolo.model
