@@ -80,6 +80,7 @@ flowchart LR
 - [`src/submission/make_submission.py`](src/submission/make_submission.py) — 내부 좌표(xyxy)를 Kaggle 형식(xywh)으로 바꿔 CSV를 만듭니다 ([#40](https://github.com/beomjin2/PillDetect/pull/40))
 - 테스트 3종 — [`test_postprocess.py`](tests/test_postprocess.py), [`test_make_submission.py`](tests/test_make_submission.py), [`test_inference_submission_pipeline.py`](tests/test_inference_submission_pipeline.py) ([#64](https://github.com/beomjin2/PillDetect/pull/64) 등)
 - `uv.lock` 파싱 오류 수정 ([#44](https://github.com/beomjin2/PillDetect/pull/44))
+- 프로젝트 이후 `postprocess.py`를 다시 검토해서 앙상블용 `class_probs`의 버그 3가지를 찾아 고쳤습니다. 버그를 재현하는 테스트 4개도 함께 추가했습니다 ([이 저장소 #2](https://github.com/cjkj1234/beginner-project-pill/pull/2), 자세한 내용은 [아래](#팀-저장소-이후-바꾼-점))
 
 **실험·분석**
 - 후처리에 Ultralytics NMS를 적용해, 팀 전체가 모델 예측을 같은 기준으로 비교할 수 있게 통일했습니다 ([#88](https://github.com/beomjin2/PillDetect/pull/88))
@@ -187,7 +188,8 @@ PyTorch · Ultralytics (YOLOv8 / YOLO11) · Albumentations · OpenCV · torchmet
 
 ## 팀 저장소 이후 바꾼 점
 
-포트폴리오로 옮기면서 아래를 고쳤습니다. 학습 로직과 실험 결과는 바꾸지 않았습니다.
+포트폴리오로 옮기면서 아래를 고쳤습니다. 학습 로직은 바꾸지 않았습니다.
+위의 점수는 모두 팀 프로젝트 당시 코드로 낸 결과입니다. 마지막 항목(`class_probs` 수정)은 앙상블의 클래스 투표 방식을 바꾸지만, 이 수정이 Kaggle 점수에 주는 영향은 확인하지 못했습니다. 학습된 가중치와 테스트 데이터가 없어서입니다.
 
 - `wandb`, `tqdm`을 의존성에 추가했습니다 (`uv sync` 후 `train.py`가 ImportError로 멈추던 문제).
 - `--num_workers 0`(CPU 실행)에서 DataLoader가 에러를 내던 문제를 고쳤습니다.
@@ -195,3 +197,8 @@ PyTorch · Ultralytics (YOLOv8 / YOLO11) · Albumentations · OpenCV · torchmet
 - `--config`로 다른 설정을 넘겨도 모델 이름은 늘 `default.yaml`에서 읽던 문제를 고쳤습니다.
 - 단일 모델 최고점 설정을 [`configs/yolo11x_1024.yaml`](configs/yolo11x_1024.yaml)로 복원했습니다 (팀 저장소 커밋 `12c823f` 기준).
 - 팀 전용 GitHub Actions(Discord 알림, Obsidian 동기화)를 지우고 pytest CI만 남겼습니다.
+- 앙상블용 `class_probs` 계산을 고쳤습니다 ([#2](https://github.com/cjkj1234/beginner-project-pill/pull/2)).
+  - YOLO 출력의 클래스 점수는 이미 sigmoid 값인데 softmax를 한 번 더 씌워서, 분포가 거의 균등해졌습니다 (56개 클래스 기준 0.9 → 약 0.04).
+  - 박스가 나온 앵커를 추측해서, 같은 클래스 박스가 둘 이상이면 다른 박스의 분포를 받았습니다. 이제 NMS가 돌려주는 앵커 번호(`return_idxs`)를 씁니다.
+  - Ultralytics NMS가 입력 텐서의 박스 좌표를 제자리에서 바꿔서, 호출한 쪽 출력까지 바뀌었습니다. 이제 복사본을 넘깁니다.
+  - 기존 `predictions.json`은 이전 방식의 값이라, 새로 만든 파일과 한 앙상블에 섞지 않아야 합니다.
