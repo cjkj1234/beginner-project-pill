@@ -183,7 +183,7 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"device: {device}")
 
-    model = build_model(cfg["data"]["nc"])
+    model = build_model(cfg["data"]["nc"], model_name=cfg["model"]["name"])
     freeze_except_cv3_last(model)
     model.to(device)
     ema = None  # Phase 2 시작 시 초기화 (Phase 1은 대부분 frozen → COCO 초기값 평균 방지)
@@ -239,6 +239,9 @@ def main():
         image_files=val_files,
     )
 
+    # persistent_workers는 워커 프로세스가 있을 때만 쓸 수 있다 (num_workers=0이면 DataLoader가 ValueError).
+    use_persistent_workers = args.num_workers > 0
+
     cw_cfg = cfg.get("class_weights") or {}
     cw_method = cw_cfg.get("method")
     if cw_method:
@@ -264,10 +267,10 @@ def main():
             manual=cw_cfg.get("manual"),
         )
         sampler = WeightedRandomSampler(sample_weights, num_samples=len(sample_weights), replacement=True)
-        train_loader = DataLoader(train_ds, batch_size=cfg["train"]["batch_size"], sampler=sampler, collate_fn=collate_fn, num_workers=args.num_workers, pin_memory=True, persistent_workers=True)
+        train_loader = DataLoader(train_ds, batch_size=cfg["train"]["batch_size"], sampler=sampler, collate_fn=collate_fn, num_workers=args.num_workers, pin_memory=True, persistent_workers=use_persistent_workers)
         print(f"class_weights: method={cw_method}, sample_weights min={min(sample_weights):.3f} max={max(sample_weights):.3f}")
     else:
-        train_loader = DataLoader(train_ds, batch_size=cfg["train"]["batch_size"], shuffle=True, collate_fn=collate_fn, num_workers=args.num_workers, pin_memory=True, persistent_workers=True)
+        train_loader = DataLoader(train_ds, batch_size=cfg["train"]["batch_size"], shuffle=True, collate_fn=collate_fn, num_workers=args.num_workers, pin_memory=True, persistent_workers=use_persistent_workers)
 
     val_loader = DataLoader(
         val_ds,
@@ -276,7 +279,7 @@ def main():
         collate_fn=collate_fn,
         num_workers=args.num_workers,
         pin_memory=True,
-        persistent_workers=True,
+        persistent_workers=use_persistent_workers,
     )
 
     opt_type = opt_cfg.get("type", "adamw").lower()
@@ -485,5 +488,6 @@ def main():
     print(f"학습 완료. best_mAP(ema): {best_mAP:.4f}")
 
 
-main()
+if __name__ == "__main__":
+    main()
 

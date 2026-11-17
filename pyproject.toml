@@ -1,7 +1,7 @@
 [project]
-name = "code-it-team-1-firstproject"
+name = "pill-detect"
 version = "0.1.0"
-description = "Add your description here"
+description = "YOLO11x 기반 경구약제(알약) 객체 탐지 — 3-Phase fine-tuning, EMA, WBF 앙상블"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
@@ -20,6 +20,8 @@ dependencies = [
     "kaggle>=2.1.2",
     "iterative-stratification>=0.1.9",
     "ensemble-boxes>=1.0.9",
+    "tqdm>=4.66.0",
+    "wandb>=0.19.0",
 ]
 
 [dependency-groups]

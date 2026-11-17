@@ -1,4 +1,8 @@
-﻿# null 체크 대상 필드 목록 — 여기에 등록된 필드만 validate_config()가 검사
+﻿# 팀 저장소 마지막 상태의 설정 — Q5-C 고해상도 실험 (YOLO11x · 1280px · batch 4 · LR×0.5)
+# 이 실험은 val mAP가 계속 떨어져 조기 종료했고 Kaggle에 제출하지 않았다.
+# 단일 모델 최고점(0.94861)을 재현하려면 configs/yolo11x_1024.yaml을 쓴다.
+
+# null 체크 대상 필드 목록 — 여기에 등록된 필드만 validate_config()가 검사
 _required:
   - model.num_classes
   - data.nc
