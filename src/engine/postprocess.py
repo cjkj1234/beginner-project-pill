@@ -1,8 +1,8 @@
-"""postprocess skeleton
-현재 단계에서는 이미 boxes / labels / scores 형태로 정리된 prediction dict를 입력으로 받는다.
+"""모델 출력 후처리: raw output → NMS → Prediction.
 
-TODO(issue #35):
-    실제 YOLO raw output 형식이 확정되면 raw output -> Prediction 변환과 NMS를 추가한다.
+- postprocess_raw_outputs(): YOLO raw output [B, 4 + nc, num_anchors]에 Ultralytics NMS를 적용해
+  이미지별 Prediction(boxes / labels / scores / class_probs)으로 바꾼다. train.py, predict.py가 쓰는 경로.
+- postprocess_prediction(s)(): 이미 boxes / labels / scores로 정리된 예측에 threshold·정렬·개수 제한만 적용한다.
 """
 
 from __future__ import annotations
@@ -20,15 +20,13 @@ class Prediction(TypedDict):
   boxes: torch.Tensor
   scores: torch.Tensor
   labels: torch.Tensor
-  class_probs: torch.Tensor  # [N, nc] — 각 박스별 클래스 확률 분포 (소프트 보팅용)
+  class_probs: torch.Tensor  # [N, nc] — 박스가 나온 앵커의 클래스 점수를 합 1로 정규화 (소프트 보팅용)
   
 RawOutputs = torch.Tensor | tuple[torch.Tensor, ...] | list[torch.Tensor]
 
 @dataclass
 class PostprocessConfig:
-  """후처리 파라미터
-  todo(issue #35): 추후 configs/default.yaml에서 값을 읽도록 연결
-  """
+  """후처리 파라미터. train.py / predict.py가 configs/*.yaml의 postprocess 섹션으로 만든다."""
   conf_threshold: float = 0.5
   iou_threshold: float = 0.7
   max_detections: int = 4
@@ -126,35 +124,27 @@ def _extract_raw_tensor(raw_outputs: RawOutputs) -> torch.Tensor:
 
   raise TypeError("raw_outputs는 Tensor 또는 Tensor를 첫 번째 값으로 가진 tuple/list여야 합니다.")
 
-def _extract_class_probs(
+def _class_probs_from_anchors(
     raw_output: torch.Tensor,
-    det: torch.Tensor,
+    anchor_idxs: torch.Tensor,
 ) -> torch.Tensor:
-  """NMS 통과한 각 박스의 클래스 확률 벡터를 raw output에서 추출한다.
+  """NMS를 통과한 박스가 나온 앵커의 클래스 점수를 확률 분포로 바꾼다.
 
-  raw_output[4:, :] 채널이 클래스 점수(로짓 또는 sigmoid 이전)이고,
-  각 NMS 박스는 특정 앵커에서 왔다. argmax가 일치하는 앵커 중 점수가
-  가장 높은 앵커를 해당 박스의 소스로 찾아 클래스 분포를 반환한다.
+  YOLO Detect head의 eval 출력에서 raw_output[4:, :]는 이미 sigmoid를 거친 0~1 점수다
+  (Ultralytics head.py `_inference`). 클래스마다 독립이라 합이 1이 아니므로,
+  앙상블 soft voting에서 박스끼리 같은 척도로 더할 수 있게 합이 1이 되도록 나눈다.
 
-  반환: [N, nc] float32 텐서 (소프트맥스 확률)
+  예전 구현과 다른 점:
+    - 여기에 softmax를 한 번 더 씌우지 않는다. sigmoid 점수(0~1)에 softmax를 쓰면
+      56개 클래스 기준 1위 점수 0.9가 약 0.04로 평평해져 투표에서 구분력이 사라진다.
+    - 앵커를 추측하지 않는다. 예전에는 "같은 클래스 중 점수가 가장 높은 앵커"를 골라서,
+      한 이미지에 같은 클래스 박스가 둘 이상이면 두 번째 박스가 첫 번째 박스의 분포를 받았다.
+      이제 NMS가 돌려준 앵커 번호(return_idxs)를 그대로 쓴다.
+
+  반환: [N, nc] float32 텐서. 각 행의 합은 1이고 argmax는 해당 박스의 label과 같다.
   """
-  nc = raw_output.shape[0] - 4
-  class_scores = raw_output[4:, :]           # [nc, num_anchors]
-  class_probs_all = class_scores.softmax(dim=0)  # [nc, num_anchors]
-  top_cls_per_anchor = class_scores.argmax(dim=0)  # [num_anchors]
-
-  result = []
-  for d in det:
-    cls_id = int(d[5])
-    candidates = (top_cls_per_anchor == cls_id).nonzero(as_tuple=True)[0]
-    if len(candidates) == 0:
-      anchor_idx = class_scores[cls_id].argmax()
-    else:
-      best = class_scores[cls_id, candidates].argmax()
-      anchor_idx = candidates[best]
-    result.append(class_probs_all[:, anchor_idx])
-
-  return torch.stack(result).to(dtype=torch.float32)  # [N, nc]
+  class_scores = raw_output[4:, anchor_idxs].T.to(dtype=torch.float32)  # [N, nc]
+  return class_scores / class_scores.sum(dim=1, keepdim=True).clamp_min(1e-12)
 
 
 def _postprocess_single_raw_output(
@@ -168,8 +158,8 @@ def _postprocess_single_raw_output(
     [4 + num_classes, num_anchors]
 
   처리 순서:
-  1. 이미지 1장 raw output에 batch 차원을 추가
-  2. Ultralytics non_max_suppression() 적용
+  1. 이미지 1장 raw output에 batch 차원을 추가 (복사본)
+  2. Ultralytics non_max_suppression() 적용 — 살아남은 박스의 앵커 번호도 함께 받는다
   3. 결과 [x1, y1, x2, y2, score, class_id]를 Prediction 형식으로 변환
   4. 예측이 없으면 빈 Prediction 형식 유지
   """
@@ -181,13 +171,16 @@ def _postprocess_single_raw_output(
 
   nc = raw_output.shape[0] - 4
 
-  detections = non_max_suppression(
-    prediction=raw_output.unsqueeze(0),
+  # non_max_suppression()은 입력의 박스 좌표를 제자리에서 xywh → xyxy로 덮어쓴다.
+  # 호출한 쪽의 raw output이 바뀌지 않도록 복사본을 넘긴다.
+  detections, kept_anchor_idxs = non_max_suppression(
+    prediction=raw_output.unsqueeze(0).clone(),
     conf_thres=config.conf_threshold,
     iou_thres=config.iou_threshold,
     agnostic=config.class_agnostic_nms,
     max_det=config.max_detections,
     nc=nc,
+    return_idxs=True,
   )
 
   det = detections[0]
@@ -198,7 +191,7 @@ def _postprocess_single_raw_output(
   boxes = det[:, :4]
   scores = det[:, 4]
   labels = det[:, 5]
-  class_probs = _extract_class_probs(raw_output, det)
+  class_probs = _class_probs_from_anchors(raw_output, kept_anchor_idxs[0].long())
 
   return {
     "image_id": int(image_id),
