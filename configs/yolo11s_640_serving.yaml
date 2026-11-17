@@ -1,0 +1,114 @@
+# 서빙 데모용 설정 — YOLO11s · 640px (CPU 추론 속도 우선)
+#
+# Q4 실험(YOLO11x · 640px · 250 epoch, Kaggle 0.943)과 같은 학습 조건에서 모델 크기만 s로 줄였다.
+# 아직 이 설정으로 학습해 보지 않았다. 학습 후 점수를 README와 서빙 저장소 벤치마크에 기록한다.
+#
+# 학습:   python train.py --config configs/yolo11s_640_serving.yaml --run-name serving-11s-640
+# 내보내기: python scripts/export_onnx.py --config configs/yolo11s_640_serving.yaml \
+#             --checkpoint outputs/checkpoints/best_model.pt --use-ema --output outputs/export/model.onnx
+
+_required:
+  - model.num_classes
+  - data.nc
+  - data.names
+  - data.class_mapping
+
+model:
+  name: yolo11s
+  num_classes: null      # class_mapping에서 자동 설정
+
+data:
+  class_mapping: configs/class_mapping.json
+  nc: null
+  names: []
+
+train:
+  epochs: 250
+  batch_size: 8
+  img_size: 640
+  seed: 42
+
+  # --- Phase 비율 ---
+  freeze_ratio: 0.2     # Phase 1: 50 에폭
+  finetune_ratio: 0.4   # Phase 2: 100 에폭, Phase 3: 나머지 100 에폭
+  unfreeze_mode: head
+
+  # --- Phase 1: cv3 마지막 Conv2d만 학습 ---
+  phase1_lr: 0.001
+  phase1_lr_min: 0.00001
+
+  # --- Phase 2: Detect head 전체 ---
+  phase2_lr: 0.001
+  phase2_lr_min: 0.00001
+
+  # --- Phase 3: backbone/neck + head 전체 fine-tune ---
+  phase3_head_lr: 0.0001
+  phase3_backbone_lr: 0.00001
+  phase3_lr_min: 0.000001
+  phase3_warmup_epochs: 5
+  phase3_bn_frozen_epochs: 5
+  early_stop_patience: 0          # Q4와 같이 조기 종료 없이 250 에폭
+
+optimizer:
+  type: adamw
+  momentum: 0.937
+  weight_decay: 0.0005
+  nesterov: true
+
+ema:
+  enabled: true
+  decay: 0.995
+
+split:
+  method: iterative
+  output_dir: data/splits
+  val_ratio: 0.2
+
+paths:
+  checkpoint: outputs/checkpoints/
+  prediction: outputs/predictions/
+  submission: outputs/submissions/
+
+postprocess:
+  conf_threshold: 0.25
+  iou_threshold: 0.7
+  max_detections: 4
+  class_agnostic_nms: true
+
+eval:
+  conf_threshold: 0.001
+
+augmentation:
+  mosaic_p: 0.0
+  mosaic_min_bbox_size: 2
+  horizontal_flip_p: 0.5
+  vertical_flip_p: 0.5
+  random_rotate90_p: 0.5
+  safe_rotate_limit: 30
+  safe_rotate_p: 0.5
+  brightness_limit: 0.2
+  contrast_limit: 0.2
+  brightness_contrast_p: 0.5
+  hue_shift_limit: 10
+  sat_shift_limit: 20
+  val_shift_limit: 20
+  hue_saturation_p: 0.3
+  clahe_clip_limit: 2.0
+  clahe_tile_grid_size: 8
+  clahe_p: 0.3
+  sharpen_alpha_min: 0.2
+  sharpen_alpha_max: 0.5
+  sharpen_lightness_min: 0.5
+  sharpen_lightness_max: 1.0
+  sharpen_p: 0.3
+  gauss_noise_var_min: 10.0
+  gauss_noise_var_max: 50.0
+  gauss_noise_p: 0.2
+  random_scale_limit: 0.2
+  random_scale_p: 0.3
+  min_area: 100
+  min_visibility: 0.3
+
+class_weights:
+  method: inverse_freq
+  manual: {}
